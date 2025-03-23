@@ -12,7 +12,12 @@ const useFetch = (url) => {
       setError(null);
 
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: {
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0", 
+          }
+        });
         const articlesWithId = response.data.articles.map((article, index) => ({ ...article, id: index + 1})); 
         setData(articlesWithId);
       } catch (error) {
