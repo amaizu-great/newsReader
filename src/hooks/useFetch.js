@@ -12,15 +12,16 @@ const useFetch = (url) => {
       setError(null);
 
       try {
-        const response = await axios.get(url); 
-        setData(response.data.articles);
-      } catch (err) {
-        setError(err.message || "An error occurred while fetching data");
-      } finally {
+        const response = await axios.get(url);
+        const articlesWithId = response.data.articles.map((article, index) => ({ ...article, id: index + 1})); 
+        setData(articlesWithId);
+      } catch (error) {
+        setError(error.message || "An Error Occurred while fetching data");
+      }finally{
         setIsLoading(false);
       }
     })();
-  }, [url]);
+  }, []);
 
   return { data, error, isLoading };
 };
