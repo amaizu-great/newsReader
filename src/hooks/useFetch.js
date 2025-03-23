@@ -1,34 +1,28 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const useFetch = (url) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); 
-  
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const response = await axios.get(url, {
-          headers: {
-            "Accept": "application/json",
-            "User-Agent": "Mozilla/5.0", 
-          }
-        });
-        const articlesWithId = response.data.articles.map((article, index) => ({ ...article, id: index + 1})); 
-        setData(articlesWithId);
-      } catch (error) {
-        setError(error.message || "An Error Occurred while fetching data");
-      }finally{
+        const response = await axios.get(url); 
+        setData(response.data.articles);
+      } catch (err) {
+        setError(err.message || "An error occurred while fetching data");
+      } finally {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [url]);
 
-  return { data, error, isLoading};
+  return { data, error, isLoading };
 };
 
 export default useFetch;
